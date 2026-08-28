@@ -164,3 +164,9 @@ The system uses password-based SMS authentication to prevent unauthorized access
 ## 👨‍💻 Project Category
 
 **Embedded Systems | ARM Microcontroller | Embedded C | GSM Communication | Temperature Monitoring**
+
+---
+
+## ✍️ Author
+
+**Kausalya Indeti**
