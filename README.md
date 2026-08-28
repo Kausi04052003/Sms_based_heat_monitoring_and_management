@@ -2,171 +2,270 @@
 
 ## 📌 Project Overview
 
-The SMS Based Heat Monitoring and Management System is an embedded system project designed for real-time temperature monitoring and control using SMS-based communication.
+The SMS Based Heat Monitoring and Management System is an embedded
+system project designed for real-time temperature monitoring and control
+using SMS-based communication.
 
-The system continuously monitors temperature-sensitive environments and provides alert notifications through GSM communication when the temperature exceeds the configured threshold. It also allows users to remotely update temperature settings, modify alert phone numbers, and request sensor information through SMS commands.
+The system continuously monitors temperature-sensitive environments and
+provides alert notifications through GSM communication when the
+temperature exceeds the configured threshold. It allows users to
+remotely update temperature settings, modify alert phone numbers, and
+request sensor information through secure SMS commands.
 
-The system is developed using an LPC2148 microcontroller with temperature sensing, GSM communication, EEPROM storage, LCD display, and alert mechanisms. It can be used in industrial facilities, cold storage systems, and server rooms where continuous temperature monitoring is required.
+The system is developed using an LPC2148 ARM7 microcontroller with
+DS18B20 temperature sensing, GSM communication, EEPROM storage, LCD
+display, RTC time monitoring, and buzzer alert mechanisms.
 
----
+------------------------------------------------------------------------
 
-## 🚀 Features
+## 👨‍💻 Author
 
-- Real-time temperature monitoring using DS18B20 temperature sensor
-- Automatic SMS alert notification during high-temperature conditions
-- Remote temperature threshold configuration through SMS
-- Password-based SMS command security
-- EEPROM-based storage for temperature settings and phone numbers
-- LCD display for temperature and system information
-- Buzzer/LED alert indication during overheating conditions
-- Real-time clock integration for timestamp-based alerts
-- GSM-based remote communication
+**Kausalya Indeti**
 
----
+------------------------------------------------------------------------
 
-## 🛠️ Hardware Components
+# 🚀 Features
 
-- LPC2148 ARM7 Microcontroller
-- GSM Module (M660A)
-- DS18B20 Temperature Sensor
-- 16x2 LCD Display
-- Buzzer
-- AT25LC512 SPI EEPROM
-- RTC Module
-- Power Supply Components
+-   Real-time temperature monitoring using DS18B20 sensor
+-   Automatic SMS alert during high-temperature conditions
+-   Temperature threshold configuration through SMS
+-   Secure SMS command authentication using passkey
+-   EEPROM storage for setpoint and mobile number
+-   LCD display for temperature and system status
+-   Buzzer alert during overheating conditions
+-   RTC-based time information in alert messages
+-   GSM-based remote communication
 
----
+------------------------------------------------------------------------
 
-## 💻 Software Requirements
+# 🛠️ Hardware Components
 
-- Embedded C Programming
-- Keil C Compiler
-- Flash Magic
-- UART Communication Programming
-- SPI Communication Programming
+-   LPC2148 ARM7 Microcontroller
+-   GSM Module (M660A)
+-   DS18B20 Temperature Sensor
+-   16x2 LCD Display
+-   Buzzer
+-   AT25LC512 SPI EEPROM
+-   RTC Module
+-   Power Supply Circuit
 
----
+------------------------------------------------------------------------
 
-## ⚙️ System Working
+# 💻 Software Requirements
 
-1. The DS18B20 temperature sensor continuously measures the current temperature.
-2. The LPC2148 microcontroller processes the temperature readings.
-3. The temperature value is displayed on the LCD.
-4. The system compares current temperature with the predefined set point stored in EEPROM.
-5. If the temperature exceeds the limit:
-   - The buzzer/LED alert is activated.
-   - SMS alert is sent to the registered mobile number.
-6. Users can configure system parameters through secure SMS commands.
+-   Embedded C Programming
+-   Keil C Compiler
+-   Flash Magic
+-   UART Communication
+-   SPI Communication
+-   ARM7 Microcontroller Programming
 
----
+------------------------------------------------------------------------
 
-## 📲 SMS Command Control
+# ⚙️ System Working
 
-### Change Temperature Set Point
+1.  The system initializes all peripherals including UART, LCD, SPI,
+    RTC, GSM, and temperature sensor.
+2.  The temperature value is continuously read from the DS18B20 sensor.
+3.  The LPC2148 processes the temperature data and displays it on the
+    LCD.
+4.  The current temperature is compared with the stored setpoint value
+    from EEPROM.
+5.  If the temperature exceeds the configured limit:
+    -   The buzzer is activated.
+    -   An SMS alert containing temperature and RTC information is sent
+        to the registered mobile number.
+6.  The system continuously checks for incoming SMS commands.
+7.  Authorized users can update the temperature setpoint, change alert
+    mobile numbers, or request sensor information.
+
+------------------------------------------------------------------------
+
+# 📲 SMS Command Control
+
+The system uses a secure SMS command format with a 4-digit passkey.
+
+## Change Temperature Setpoint
 
 Format:
-```
-XXXXTTemperatureValue$
-```
+
+    XXXXTTemperatureValue$
 
 Example:
-```
-0786T38$
-```
 
-### Change Alert Mobile Number
+    0786T38$
+
+Updates the temperature threshold value stored in EEPROM.
+
+------------------------------------------------------------------------
+
+## Change Alert Mobile Number
 
 Format:
-```
-XXXXMMobileNumber$
-```
+
+    XXXXMMobileNumber$
 
 Example:
-```
-0786M9866666699$
-```
 
-### Request Sensor Information
+    0786M9866666699$
+
+Updates the notification mobile number stored in EEPROM.
+
+------------------------------------------------------------------------
+
+## Request Sensor Information
 
 Format:
-```
-XXXXI$
-```
+
+    XXXXI$
 
 Example:
-```
-0786I$
-```
 
----
+    0786I$
 
-## 🏗️ System Architecture
+Sends current temperature and time information through SMS.
 
-```
-        DS18B20
-            |
-            ↓
-      LPC2148 MCU
-            |
-   -----------------
-   |       |       |
-  LCD    RTC   EEPROM
-            |
-            ↓
-       GSM Module
-            |
-            ↓
-      SMS Notification
-            |
-            ↓
-          User
-```
+------------------------------------------------------------------------
 
----
+# 🏗️ Project Flow Diagram
 
-## 🔒 Security Mechanism
+                        START
+                          |
+                          ↓
+            Initialize Embedded System Modules
+                          |
+       ---------------------------------------------
+       |        |        |        |                 |
+     UART     LCD      SPI      RTC              GSM
+     Init     Init     Init     Init             Init
+                          |
+                          ↓
+            Load Setpoint from EEPROM
+                          |
+                          ↓
+              Read Temperature Sensor
+                          |
+                          ↓
+              Display Temperature on LCD
+                          |
+                          ↓
+                 Read RTC Time
+                          |
+                          ↓
+            Compare Temperature & Setpoint
+                          |
+                 ----------------
+                 |              |
+                 ↓              ↓
+         Temperature High    Normal Temp
+                 |              |
+                 ↓              ↓
+           Activate Buzzer   Continue Monitoring
+                 |
+                 ↓
+           Send Alert SMS
+                 |
+                 ↓
+           Check Incoming SMS
+                 |
+                 ↓
+         Verify Sender Number
+                 |
+                 ↓
+           Validate Passkey
+                 |
+           -------------------------
+           |           |            |
+           ↓           ↓            ↓
+      T Command    M Command    I Command
+     Update Temp  Update Mobile Sensor Info
+      Setpoint      Number        Response
+           |
+           ↓
+     Save Data in EEPROM
+           |
+           ↓
+     Delete SMS
+           |
+           ↓
+     Return to Monitoring Loop
 
-The system uses password-based SMS authentication to prevent unauthorized access. Only messages containing the correct passkey and valid command format are processed.
+------------------------------------------------------------------------
 
----
+# 🏗️ System Architecture
 
-## 🌍 Applications
+                 DS18B20 Temperature Sensor
+                           |
+                           ↓
+                     LPC2148 MCU
+                           |
+            --------------------------------
+            |              |               |
+            ↓              ↓               ↓
+          LCD             RTC          EEPROM
+        Display          Time        Storage
+                           |
+                           ↓
+                      GSM Module
+                           |
+                           ↓
+                  SMS Notification
+                           |
+                           ↓
+                        User
 
-- Industrial temperature monitoring
-- Cold storage monitoring systems
-- Server room temperature protection
-- Electronic equipment safety monitoring
-- Laboratory temperature control systems
+------------------------------------------------------------------------
 
----
+# 🔒 Security Mechanism
 
-## ✅ Advantages
+The system uses password-based SMS authentication to prevent
+unauthorized access.
 
-- Real-time temperature monitoring
-- Remote configuration using SMS
-- No internet dependency
-- Secure user authentication
-- Low-cost embedded solution
-- Reliable alert mechanism
+Only messages containing the correct passkey and valid command format
+are processed. Unauthorized senders receive an access denial message,
+while invalid commands are rejected.
 
----
+------------------------------------------------------------------------
 
-## 🔮 Future Enhancements
+# 🌍 Applications
 
-- Mobile application-based monitoring
-- Cloud data logging
-- Multiple sensor support
-- Automatic cooling system control
-- Advanced security authentication
+-   Industrial temperature monitoring
+-   Cold storage monitoring systems
+-   Server room temperature protection
+-   Electronic equipment safety monitoring
+-   Laboratory temperature control systems
+-   Remote environmental monitoring
 
----
+------------------------------------------------------------------------
 
-## 👨‍💻 Project Category
+# ✅ Advantages
 
-**Embedded Systems | ARM Microcontroller | Embedded C | GSM Communication | Temperature Monitoring**
+-   Real-time temperature monitoring
+-   Remote control using SMS communication
+-   No internet dependency
+-   Secure authentication mechanism
+-   Low-cost embedded system design
+-   Reliable alert notification
 
----
+------------------------------------------------------------------------
 
-## ✍️ Author
+# 🔮 Future Enhancements
+
+-   Mobile application integration
+-   Multiple temperature sensor support
+-   Automatic cooling system control
+-   Cloud-based data logging
+-   Advanced authentication methods
+
+------------------------------------------------------------------------
+
+# 👨‍💻 Project Category
+
+**Embedded Systems \| ARM7 Microcontroller \| Embedded C \| GSM
+Communication \| Temperature Monitoring**
+
+------------------------------------------------------------------------
+
+# ✍️ Author
 
 **Kausalya Indeti**
