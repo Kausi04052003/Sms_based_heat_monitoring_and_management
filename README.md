@@ -16,11 +16,6 @@ The system is developed using an LPC2148 ARM7 microcontroller with
 DS18B20 temperature sensing, GSM communication, EEPROM storage, LCD
 display, RTC time monitoring, and buzzer alert mechanisms.
 
-------------------------------------------------------------------------
-
-## 👨‍💻 Author
-
-**Kausalya Indeti**
 
 ------------------------------------------------------------------------
 
